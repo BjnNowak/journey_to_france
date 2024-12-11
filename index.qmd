@@ -1,0 +1,264 @@
+---
+title: A Journey Through France
+format:
+  closeread-html:
+    cr-style:
+      section-background-color: "#1E1E1E"
+    theme: journal
+    css:
+      - css/main.css
+    include-after-body: 
+      templates/footer.html
+---
+
+::::{.cr-section layout="overlay-right"}
+
+:::{#cr-map1}
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/map1.png)
+:::
+
+Have you ever **visited France** ?
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/road.jpg" width=100% title="The road winds through the vineyards of Burgundy."></img>
+<small>**Picture** [Peter Herrmann](https://pixabay.com/fr/photos/route-vignobles-des-nuages-6560656/)</small>[@cr-pop]{pan-to="0%,-20%" scale-by="0.5"}
+
+Let's take a tour of the country together.
+
+This is a map of **population density** in mainland France, using data from the [Global Human Settlement Layer project](https://human-settlement.emergency.copernicus.eu/). 
+
+:::{#cr-pop}
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/pop_density.png)
+:::
+
+:::{#cr-ift}
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/ift.png)
+:::
+
+
+**White lines** represent **regional boundaries**, <b><span style="color:#4C8B9D;background-color:white;">blue pixels</span></b> show the <b><span style="color:#4C8B9D;background-color:white;">most populated areas.</span></b> 
+
+For example, here is the Île-de-France region, with **Paris** in the center.
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/eiffel_tower.jpg" width=100% title="Picture of the Eiffel Tower."></img>
+<small>**Picture** [Nuno Lopes](https://pixabay.com/fr/photos/tour-eiffel-la-france-paris-paysage-975004/)</small>[@cr-pop]{pan-to="0%,40%" scale-by="3"}
+
+But I also want to tell you about **another map of France.**[@cr-ift]{pan-to="0%,-20%" scale-by="0.5"}
+
+This one is a map of the **number of pesticides applications** per year.[@cr-ift]{pan-to="0%,-20%" scale-by="0.5"}
+
+[It was obtained](https://www.biorxiv.org/content/10.1101/2024.11.25.624818v1.full) by taking into account all fields declared to the Common Agricultural Policy, and applying an average number of treatments per crop and per region.
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/workflow.png" width=100% title="Detail of pesticide application map creation: white lines represent field boundaries."></img>
+
+<b><span style="color:#A63D41;background-color:white;">Red pixels</span></b> show the areas with the <b><span style="color:#A63D41;background-color:white;">highest number of pesticides applications</span></b>.
+ 
+This is particularly the case in Northern France because of the **cultivation of industrial crops** (sugar beet, potatoes) which require a high number of treatmentst: potatoes receive around **20 pesticide applications** a year, compared with 3 for maize, for example.
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/field_spraying.jpg" width=100% title="Picture of a field sprayed with pesticides."></img>
+<small>**Picture** [Piotr Zakrzewski](https://pixabay.com/photos/agriculture-tractor-field-land-6502282/)</small>[@cr-ift]{pan-to="0%,30%" scale-by="2"}
+
+...but also because of a higher number of treatments for a given crop in Northern France compared to other regions, as **illustrated below for soft winter wheat**.
+```{r}
+#| warning: false
+
+library(tidyverse)
+library(sf)
+library(leaflet)
+
+map<-read_sf('https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/map/regions-avant-redecoupage-2015.geojson')
+
+data<-tibble(
+  nom=c(
+    'Alsace', 'Aquitaine','Auvergne', 'Basse-Normandie',
+    'Bourgogne', 'Bretagne', 'Centre', 'Champagne-Ardenne',
+    'Franche-Comté', 'Haute-Normandie', 'Île-de-France',
+    'Lorraine', 'Midi-Pyrénées', 'Nord-Pas-de-Calais',
+    'Pays de la Loire', 'Picardie', 'Poitou-Charentes',
+    'Rhône-Alpes','Limousin','Languedoc-Roussillon',
+    'Corse',"Provence-Alpes-Côte d'Azur"
+  ),
+  ift=c(
+    3.4,3.4,3.9,5.3,
+    4.4,4.5,5.9,5.4,
+    4.5,7.0,5.7,
+    4.4,3.0,5.7,
+    4.6,6.0,4.7,
+    3.5,NA,NA,
+    NA,NA
+  )
+)
+
+
+map_data<-map%>%
+  left_join(data)%>%
+  mutate(labels=case_when(
+    ift>0~glue::glue("<b>{nom}</b><br>{ift} applications"),
+    TRUE~glue::glue("<b>{nom}</b><br>No data for wheat")
+  ))
+
+labels<-map_data$labels%>%
+  lapply(htmltools::HTML)
+
+
+bins <- seq(3,7,1)
+pal <- colorBin("YlOrRd", domain = map_data$ift, bins = bins)
+pal_noNA <- colorBin("YlOrRd", domain = map_data$ift, bins = bins,
+    na.color = NA
+)
+
+m <- leaflet(map_data) %>% 
+  addTiles()%>%
+  addPolygons(
+    fillColor = ~pal(ift),
+              weight = 1,
+              opacity = 1,
+              color = "white",
+              dashArray = "0",
+              fillOpacity = 0.7
+    ,highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto")
+  )%>% 
+  addLegend(
+    pal = pal_noNA, 
+    values = ~ift, opacity = 0.7, title = "Number of applications on wheat",
+                 position = "bottomleft")
+
+
+m
+```
+
+This can be explained by more intensive farming systems and weather conditions that favor disease development in Northern France.
+
+**Any idea what is coming next ?**[@cr-ift]{pan-to="0%,-20%" scale-by="0.5"}
+
+[...last chance to take a guess...]
+
+:::{#cr-bivar}
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/bivar.png)
+:::
+
+By combining the two maps, we obtain a map of the population's exposure to pesticides.[@cr-bivar]{pan-to="0%,-20%" scale-by="0.5"}
+
+Let's take a close look at the legend.
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/bivar_leg.png" width=100% title="Legend of the bivariate choropleth map."></img>
+
+Approximately **25 % of the population** is exposed to one pesticide application or more per year less than 100m from their home.
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/weepeople.png)
+
+This figure varies greatly from region to region.
+
+For example, in Brittany, over **45% of the population** is exposed to at least one pesticide application per year.[@cr-bivar]{pan-to="35%,10%" scale-by="2"}
+
+Such a result can be explained by the proximity of housing to fields in this region, with many small urban areas intermingled with agricultural areas.
+
+<big>But some people are **more sensitive** to pesticide exposure than others.</big>
+
+Ten years ago, 28 pupils and their teacher at a school in the Bordeaux vineyards **experienced illness** when pesticides were sprayed near their playground.
+<img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/france_tv.png" width=100% title="Picture of the schoolyard, showing the proximity of the vineyards"></img>
+<small>**Source** [Jérôme Jamet, France Info](https://www.francebleu.fr/infos/societe/pesticides-epandus-pres-d-une-ecole-il-y-a-10-ans-l-affaire-de-villeneuve-de-blaye-creait-un-electrochoc-national-6257276)</small>[@cr-bivar]{pan-to="25%,-35%" scale-by="2"}
+
+Like potatoes, vines receive a large number of pesticide treatments (around 15 a year for Bordeaux vineyards, for example).
+
+A few years earlier, pesticide use had been suspected in [the development of pediatric cancers in another commune of the same region](https://www.francebleu.fr/infos/sante-sciences/reunion-sur-les-liens-entre-cancers-d-enfants-et-pesticides-preignac-1442345057).
+
+The [ensuing epidemiological study](https://www.santepubliquefrance.fr/determinants-de-sante/exposition-a-des-substances-chimiques/pesticides/documents/rapport-synthese/investigation-d-une-suspicion-d-agregat-de-cancers-pediatriques-dans-une-commune-viticole-de-gironde.-juin-2013) highlighted the high level of wine-growing activity in the study area, with **pesticide spraying in the vicinity of the school**. 
+
+The following map will allow you to explore the school's surroundings.
+```{r}
+#| warning: false
+
+library(tidyverse)
+library(leaflet)
+
+school<-tibble(
+  name="School of Preignac",
+  latitude=44.582371652568646,
+  longitude=-0.2980652457917351
+)
+
+leaflet(data=school)%>%
+  addProviderTiles(
+    providers$Esri.WorldImagery,
+    options = providerTileOptions(opacity = 1)
+  )%>%
+  addTiles(options=providerTileOptions(opacity = 0.5))%>%
+  addMarkers(~longitude,~latitude,popup = ~as.character(name), label =~as.character(name))
+```
+
+But in that case a [lack of data](https://www.sudouest.fr/environnement/pesticides/lien-entre-cancers-pediatriques-et-pesticides-sur-les-vignes-il-y-a-un-manque-de-donnees-disponibles-17439583.php) made it impossible to conclude on the link between pesticide use and pediatrics cancers.
+
+We hope that the map of pesticide treatments in France that we have developed may help to elucidate this issue.[@cr-bivar]{pan-to="0%,-20%" scale-by="0.5"}
+
+In fact, in the same way that we as we combined the map of pesticide applications with population density, this map can also be crossed with **the location of schools in the country** to create a map of pupils' exposure to pesticides. 
+
+:::{#cr-schools}
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/schools.png)
+:::
+
+For example, here is a map of **the 1,663 schools exposed to more than 10 pesticide applications** per year.[@cr-schools]{pan-to="0%,-20%" scale-by="0.5"}
+
+The Bordeaux wine-growing area is indeed one of the regions concerned.[@cr-schools]{pan-to="25%,-35%" scale-by="2"}
+
+... as is the case for the Burgundy vineyards.[@cr-schools]{pan-to="-15%,-25%" scale-by="2"}
+
+... but also in the field crop regions of northern France.[@cr-schools]{pan-to="-5%,35%" scale-by="2"}
+
+Unfortunately, the youngest students are the most exposed to pesticides applications.
+![](https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/schools_expo.png)[@cr-schools]{pan-to="0%,-20%" scale-by="0.5"}
+
+This is due to the fact that **schools for the youngest children are scattered throughout the territories**, while **high schools are concentrated in the cities**.
+
+
+
+::::
+
+<br><br>
+<center>
+<div class="joli">
+Recent research has highlighted a potential harmful effect of pesticide treatments on children
+</div>
+<br><br><br>
+<div class="joli">
+In North America, [Frank (2024)](https://www.science.org/doi/10.1126/science.adg0344) showed that the decrease of insect-eating bat populations led to an increase in insecticide treatments, which in turn has led to **an increase in infant mortality** in the affected regions.
+</div>
+<br><br><br>
+<div class="joli">
+Such research depend on reliable and accurate quantification of pesticide use.
+</div>
+<br><br><br>
+<div class="joli">
+To facilitate the implementation of similar epidemiological studies in France, the map of pesticide use we presented here is <b>freely downloadable [at this link](https://zenodo.org/records/14202332).</b>
+</div>
+</center>
+<br><br><br>
+
+## To go further
+
+<span style="color:white;">Click on the pictures below to explore additional ressources:</span>
+<br>
+
+<table style="width: 100%; background-color:#1E1E1E;">
+
+<tr>
+  <td>
+  <center>
+  <a href="https://www.biorxiv.org/content/10.1101/2024.11.25.624818v1" ><img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/biorxiv.png" width=90% title="Scientific preprint describing our methodology to map pesticide use in France"></img></a>
+  </center>
+  </td>
+
+  <td>
+  <center>
+  <a href="https://bjnnowak.quarto.pub/exposition_pesticide/" ><img src="https://raw.githubusercontent.com/BjnNowak/TidyTuesday/refs/heads/main/img/interactiv_map.png" width=90% title="Interactive map of pesticide use in mainland France"></img></a>
+  </center>
+  </td>
+  
+</tr>
+
+</table>
+
+<br><br>

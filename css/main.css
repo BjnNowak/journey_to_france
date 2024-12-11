@@ -1,0 +1,153 @@
+html,
+body{
+   margin:0;
+   padding:0;
+   color: #FFFFFF;
+   background-color: #1E1E1E;
+ }
+ 
+
+ 
+ h1, h2, h3, h4 {
+   color: #FFFFFF;
+ }
+ 
+/* unvisited link */
+a:link {
+  color: hotpink;
+}
+
+/* visited link */
+a:visited {
+  color: #EBB7CB;
+}
+
+/* mouse over link */
+a:hover {
+  color: hotpink;
+}
+
+
+h1 {
+ text-align:center; 
+ font-size:35px; 
+ padding: 10px;
+ padding: 0px 20px;
+}
+
+
+ 
+
+
+.ttl {
+  text-align: left;
+}
+
+.ttl h1{
+  display: inline-block;
+  float: left;
+  padding: 0px 0px;
+  font-size: 32px;
+  color: white;
+  font-weight: 200;
+
+}
+
+.ttl span{
+  font-weight: 800;
+}
+
+.author{
+  font-weight: 200;
+  font-size: 20px;
+}
+
+
+
+.navigation {
+  text-align: right;
+  font-size: 16px;
+  list-style: none;
+}
+
+.navigation li{
+  display: inline-block;
+  padding: 0px 0px;
+  color: white;
+}
+
+.navigation li a{
+  color: white;
+  font-family: 'Barlow';
+  font-size: 16px;
+
+}
+
+.quote-container {
+  background-color: #EBB7CB;
+  color:black;
+}
+
+.footer-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: #EBB7CB;
+    /*border: 1.1px solid white;*/
+    background-color: #1E1E1E;
+    font-size: 12px;
+    font-weight: 200;
+    margin: 0rem 0rem 2rem 9rem;
+}
+
+.socials{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0rem 0rem 1rem -2rem;
+}
+
+.socials li{
+    margin: 0 0 px;
+}
+
+.socials a{
+    text-decoration: none;
+    color: #fff;
+    /*border: 1.1px solid white;*/
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.socials a i{
+    font-size: 1.1rem;
+    width: 20px;
+    transition: color .4s ease;
+}
+
+.joli {
+  position: relative;
+  background-color: #677582;
+  color:white;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 25px;
+  max-width: 600px;*
+}
+
+.joli::before {
+  content: "";
+
+  position: absolute;
+  z-index: -1;
+  bottom: 15px;
+  right: 5px;
+  width: 50%;
+  top: 80%;
+  max-width: 600px;
+
+
+}

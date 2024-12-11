@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "A Journey Through France",
+    "section": "",
+    "text": "Have you ever visited France ?  Picture Peter Herrmann\n\n\n\n\nLet’s take a tour of the country together.\n\n\n\n\nThis is a map of population density in mainland France, using data from the Global Human Settlement Layer project.\n\n\n\n\nWhite lines represent regional boundaries, blue pixels show the most populated areas.\n\n\n\n\nFor example, here is the Île-de-France region, with Paris in the center.  Picture Nuno Lopes\n\n\n\n\nBut I also want to tell you about another map of France.\n\n\n\n\nThis one is a map of the number of pesticides applications per year.\n\n\n\n\nIt was obtained by taking into account all fields declared to the Common Agricultural Policy, and applying an average number of treatments per crop and per region. \n\n\n\n\nRed pixels show the areas with the highest number of pesticides applications.\n\n\n\n\nThis is particularly the case in Northern France because of the cultivation of industrial crops (sugar beet, potatoes) which require a high number of treatmentst: potatoes receive around 20 pesticide applications a year, compared with 3 for maize, for example.  Picture Piotr Zakrzewski\n\n\n\n\n…but also because of a higher number of treatments for a given crop in Northern France compared to other regions, as illustrated below for soft winter wheat.\n\n\n\n\n\n\n\n\n\n\n\n\nThis can be explained by more intensive farming systems and weather conditions that favor disease development in Northern France.\n\n\n\n\nAny idea what is coming next ?\n\n\n\n\n[…last chance to take a guess…]\n\n\n\n\nBy combining the two maps, we obtain a map of the population’s exposure to pesticides.\n\n\n\n\nLet’s take a close look at the legend. \n\n\n\n\nApproximately 25 % of the population is exposed to one pesticide application or more per year less than 100m from their home. \n\n\n\n\nThis figure varies greatly from region to region.\n\n\n\n\nFor example, in Brittany, over 45% of the population is exposed to at least one pesticide application per year.\n\n\n\n\nSuch a result can be explained by the proximity of housing to fields in this region, with many small urban areas intermingled with agricultural areas.\n\n\n\n\nBut some people are more sensitive to pesticide exposure than others.\n\n\n\n\nTen years ago, 28 pupils and their teacher at a school in the Bordeaux vineyards experienced illness when pesticides were sprayed near their playground.  Source Jérôme Jamet, France Info\n\n\n\n\nLike potatoes, vines receive a large number of pesticide treatments (around 15 a year for Bordeaux vineyards, for example).\n\n\n\n\nA few years earlier, pesticide use had been suspected in the development of pediatric cancers in another commune of the same region.\n\n\n\n\nThe ensuing epidemiological study highlighted the high level of wine-growing activity in the study area, with pesticide spraying in the vicinity of the school.\n\n\n\n\nThe following map will allow you to explore the school’s surroundings.\n\n\n\n\n\n\n\n\n\n\n\n\nBut in that case a lack of data made it impossible to conclude on the link between pesticide use and pediatrics cancers.\n\n\n\n\nWe hope that the map of pesticide treatments in France that we have developed may help to elucidate this issue.\n\n\n\n\nIn fact, in the same way that we as we combined the map of pesticide applications with population density, this map can also be crossed with the location of schools in the country to create a map of pupils’ exposure to pesticides.\n\n\n\n\nFor example, here is a map of the 1,663 schools exposed to more than 10 pesticide applications per year.\n\n\n\n\nThe Bordeaux wine-growing area is indeed one of the regions concerned.\n\n\n\n\n… as is the case for the Burgundy vineyards.\n\n\n\n\n… but also in the field crop regions of northern France.\n\n\n\n\nUnfortunately, the youngest students are the most exposed to pesticides applications. \n\n\n\n\nThis is due to the fact that schools for the youngest children are scattered throughout the territories, while high schools are concentrated in the cities."
+  },
+  {
+    "objectID": "index.html#to-go-further",
+    "href": "index.html#to-go-further",
+    "title": "A Journey Through France",
+    "section": "To go further",
+    "text": "To go further\nClick on the pictures below to explore additional ressources:"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  }
+]
